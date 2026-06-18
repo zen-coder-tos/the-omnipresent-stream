@@ -109,7 +109,7 @@ omnipresent-stream-v12/
 ├── README.md                # System specification architecture document
 │
 ├── web_portal/              # Frontend presentation layer (Procedural Graphic Client)
-│   └── index.html           # Highly optimized single-file UI (<100KB) with live sandbox Console
+│   └── index.html           # Highly optimized single-file UI (~100KB) with live sandbox Console
 │
 └── core_engine/             # Backend computational engine
     ├── __init__.py
