@@ -1,16 +1,27 @@
 # Copyright (c) 2026 Zen Coder. All Rights Reserved.
-# Project: THE OMNIPRESENT STREAM (v12.0 Ultimate Edition)
+# Project: THE OMNIPRESENT STREAM (v14.0 Formal Mathematical Architecture)
 # License: GNU Affero General Public License v3.0 (AGPL-3.0)
-# Commercial Restriction: Any commercial exploitation, closed-source SaaS hosting, 
-# or usage by entities exceeding $1M annual gross revenue requires a explicit proprietary license from the author.
 
 """
 THE OMNIPRESENT STREAM - Core Metaphysical Engine
-v12.0 (Gödel-Integrated)
+v14.0 (SMEA - Quantum Subspace Leakage)
 """
 
 from .stream_physics import (
+    EmbeddedAgentState,
     DataNode,
     GodelCompiler,
     StreamOS,
+    embedded_agent_runtime_core,
+    load_system_parameters,
+    generate_isometry,
+    generate_hamiltonian,
+    capture_subspace_density_matrix,
+    compute_quantum_leakage_operator,
+    measure_environmental_surprisal,
+    mutate_logic_graphs,
+    compute_mdl_length,
+    identify_high_loss_low_utility_nodes,
+    measure_ambient_temperature,
+    flush_thermal_energy_to_physical_hardware,
 )
