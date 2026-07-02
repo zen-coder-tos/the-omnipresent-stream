@@ -13,10 +13,10 @@ DIM_SUB = 3    # H_t, cognitive subspace dimension
 
 class EmbeddedAgentState:
     def __init__(self, F_init: Set[Any], M_max: float, threshold: float):
-        self.F_t: Set[Any] = F_init            # Current Axiom Set
-        self.M_current: float = 0.0            # Current Memory Usage (bits)
-        self.M_max: float = M_max              # Physical Memory Boundary
-        self.threshold: float = threshold      # Prediction Error Threshold
+        self.F_t: Set[Any] = F_init            # Active Axiom Dataflow Graph
+        self.M_current: float = 0.0            # Current physical memory load (bits)
+        self.M_max: float = M_max              # Physical Memory Ceiling Limit
+        self.threshold: float = threshold      # Acceptable Leakage Error Threshold
         self.clock: float = 0.0                # Internal simulation clock
 
 class DataNode:
@@ -262,8 +262,7 @@ class StreamOS:
 
 def embedded_agent_runtime_core(agent: EmbeddedAgentState) -> None:
     """
-    IEEE/ISO Specification for SMEA Runtime Loop (Version 14.0)
-    Standalone loop for validation/testing of core properties.
+    IEEE/ISO Compliant Reference Implementation for SMEA Runtime Loop (V14.0)
     """
     alpha, beta, _ = load_system_parameters()
     W_t = generate_isometry()
