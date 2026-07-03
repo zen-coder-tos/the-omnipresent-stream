@@ -1,4 +1,4 @@
-# THE OMNIPRESENT STREAM: A FORMAL MATHEMATICAL ARCHITECTURE FOR SELF-MODIFYING EMBEDDED AGENTS (v14.0)
+# THE EMPIRICAL RESIDUAL STREAM: A STATE-SYNCHRONIZED AND INFORMATION-GEOMETRIC ARCHITECTURE FOR SELF-MODIFYING EMBEDDED AGENTS VIA SUB-MANIFOLD NATURAL GRADIENTS (v20.0)
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-cyberpunk.svg)](LICENSE)
 [![Engine: Substrate--Independent](https://img.shields.io/badge/Engine-Substrate--Independent-FF007F.svg)]()
@@ -7,237 +7,168 @@
 
 ---
 
-## 🏛️ DIAGRAM OF THE GLOBAL LOGICAL ARCHITECTURE
+## 🏛️ GLOBAL ARCHITECTURE DATAFLOW
 
 ```text
-[Infinite-Dimensional Environment H_∞] ──(Spectral Gap Undecidability)──> [Dynamical Leakage Operator Δ_G]
-                                                                                   │
-                                                                       (Resource Constraint τ)
-                                                                                   │
-                                                                                   ▼
-[Tarski Multilayer Semantic Hierarchy] <──(Darwinian Information Filter)── [Axiomatic Openness F_t ∪ {A*}]
+[Global Environment State x_t ∈ X] ──(Lossy Random Projection φ)──> [Latent Manifold State z_t ∈ Z]
+                                                                                │
+                                                                   (Forward Predictor f_A)
+                                                                                │
+                                                                                ▼
+[Tarski Isolated Sandbox Tier Φ_U] <──(Dynamic Mask Mutation)── [Empirical Residual Covariance Σ̂_t]
                 │
-    (MERA Tensor Net Geometry)
-                │
-                ▼
-[Spacetime Interface 3D+1D Continuous]
-                │
-    (Memory Threshold M_max)
+    (Computable Occam Bound Check)
                 │
                 ▼
-[Garbage Collection G giao thức] ──(Bennett-Landauer Erasure)──> [Thermal Energy Dissipation at Φ_L]
+[Structural Evolution F_t ∪ {A*]
+                │
+    (Rigid Memory Ceiling M_max)
+                │
+                ▼
+[Dynamic State-Synced Pruning] ──(Bennett Erasure)──> [Functional Landauer Pacing Damping]
 ```
 
 ---
 
-## 1. PURPOSE & SYSTEM SCOPE
+## 1. EMBEDDED OBSERVER FORMALISM & LATENT STATE MANIFOLDS
 
-This document establishes the formal mathematical specification and algorithmic architecture for a Self-Modifying Embedded Agent (SMEA) operating within an open, infinite-dimensional quantum environment.
+This architecture rejects uncomputable global abstractions or latent infinite-dimensional spaces. The framework operates entirely within the boundaries of **Information Geometry** defined on continuous latent manifolds regulated by discrete topological boolean masking tensors.
 
-This architecture rejects speculative physical claims regarding the universe as a continuous monolithic computation. Instead, it defines a **Formal Epistemic Ontology**, strictly bounding the computational limits, semantic mapping, memory management under thermodynamic constraints, and axiomatic evolution of an agent physically localized inside the environment it observes.
+*   **The Global Environment ($\mathcal{E}$):** Characterized as a continuous, high-dimensional, non-ergodic dynamical system operating on an unobservable state space $\mathcal{X} \subseteq \mathbb{R}^D$.
+*   **The Embedded Agent ($\mathcal{A}$):** Bounded intrinsically by a localized physical resource limitation tuple $\mathcal{A} = \{ M_{\max}, \tau, \mathcal{F}_t \}$, where $M_{\max}$ represents the strict physical memory ceiling (in bits), $\tau$ is the deterministic compute time budget allocated per runtime loop, and $\mathcal{F}_t$ is the active Directed Acyclic Graph (DAG) configuration of computational primitives at timestamp $t$.
+*   **The Lossy Observation Mapping ($\phi$):** The agent interacts with the environment exclusively through a non-invertible, dimension-reducing projection mapping that instantiates a localized, continuous latent manifold $\mathcal{Z} \subseteq \mathbb{R}^d$ (where $d \ll D$):
+    $$z_t = \phi(x_t) \in \mathbb{R}^d$$
 
----
-
-## 2. MATHEMATICAL FOUNDATIONS & DYNAMICAL NON-DEGENERATION
-
-### 2.1. State Space and Partial Isometry
-
-*   **The Global Environment ($\mathcal{E}$):** Characterized by an infinite-dimensional Hilbert space $\mathcal{H}_{\infty}$ and a global time-evolution Hamiltonian $H_{\mathcal{E}} \in \mathcal{L}(\mathcal{H}_{\infty})$.
-*   **The Embedded Agent ($\mathcal{A}$):** Operates strictly within a time-varying, finite-dimensional subspace $\mathcal{H}_t \subset \mathcal{H}_{\infty}$ at any given instantiation $t$.
-*   **The Projection Mapping ($W_t$):** A partial isometry mapping the global Hilbert space to the agent’s internal localized subspace:
-    $$W_t: \mathcal{H}_{\infty} \rightarrow \mathcal{H}_t$$
-    Subject to the algebraic boundary constraints:
-    $$W_t W_t^\dagger = I_{\mathcal{H}_t} \quad \text{and} \quad W_t^\dagger W_t = P_t \neq I_{\mathcal{H}_{\infty}}$$
-    where $P_t$ is the orthogonal projector onto the active subspace of the agent within $\mathcal{H}_{\infty}$.
-
-### 2.2. The Dynamical Gödelian Leakage Operator ($\hat{\Delta}_G$)
-
-To bypass the algebraic degeneration ($\hat{\Delta}_G = 0$) inherent in static partial isometry models, the epistemic error of the agent is formally modeled through the non-commutative dynamics of the global environment relative to the agent's internal boundary: $[H_{\mathcal{E}}, P_t] \neq 0$.
-
-The Dynamical Gödelian Leakage Operator $\hat{\Delta}_G \in \mathcal{L}(\mathcal{H}_t)$ is mathematically defined as:
-$$\hat{\Delta}_G := W_t H_{\mathcal{E}} (I_{\mathcal{H}_{\infty}} - P_t) H_{\mathcal{E}} W_t^\dagger$$
-
-#### Rigorous Algebraic Properties:
-*   **Self-adjointness:** $\hat{\Delta}_G^\dagger = \hat{\Delta}_G$
-*   **Positive Semi-definiteness:** $\hat{\Delta}_G \ge 0$
-*   **Non-negative Trace Preservation:** For any valid density operator $\rho_t$ representing the agent's internal quantum state on $\mathcal{H}_t$:
-    $$\text{Tr}(\hat{\Delta}_G \rho_t) = \text{Tr}\left( (I_{\mathcal{H}_{\infty}} - P_t) H_{\mathcal{E}} W_t^\dagger \rho_t W_t H_{\mathcal{E}} \right) \ge 0$$
-
-*   **Physical Interpretation:** $\text{Tr}(\hat{\Delta}_G \rho_t)$ represents the **Quantum Dynamical Leakage Rate**. It quantifies the probability amplitude per unit time of state transitions escaping from the agent's observable subspace into the unobserved, non-computable background degrees of freedom due to spectral gap undecidability.
+Because $d \ll D$, the projection $\phi$ discards massive upstream systemic dynamics, structurally forcing the agent to execute state tracking within a Partially Observable Markov Decision Process (POMDP).
 
 ---
 
-## 3. COMPUTABLE ADAPTATION DYNAMICS & MARKOV EVOLUTION
+## 2. THE ONLINE EMPIRICAL RESIDUAL COVARIANCE OPERATOR
 
-The embedded agent $\mathcal{A}$ is bounded by a resource tuple: $\{ M_{\max}, \tau, \mathcal{F}_t \}$, where $\mathcal{F}_t$ represents the active formal axiom and algorithm set at time $t$.
+The agent derives its learning signals purely from localized, online observation extremities. Let $f_{\mathcal{A}}: \mathcal{Z} \times \mathcal{A} \rightarrow \mathcal{Z}$ be the continuous deterministic forward transition function parameterized by the active graph network $\mathcal{F}_t$. The **Online Empirical Residual Covariance Operator** $\hat{\Sigma}_t \in \mathbb{R}^{d \times d}$ is evaluated dynamically by the agent across a finite temporal sliding window $K$:
 
-### 3.1. Computable Minimum Description Length (MDL) Loss Function
+$$\hat{\Sigma}_t := \frac{1}{K}\sum_{i=0}^{K-1} \left( z_{t-i} - f_{\mathcal{A}}(z_{t-i-1}, a_{t-i-1}) \right) \left( z_{t-i} - f_{\mathcal{A}}(z_{t-i-1}, a_{t-i-1}) \right)^T$$
 
-To eliminate the uncomputability of classical Kolmogorov complexity $K(\mathcal{F}_t)$, the formal system represents $\mathcal{F}_t$ as a finite, directed computational dataflow graph encoded via a compact grammar. Its information footprint is measured via a Computable MDL Proxy function $\mathcal{L}_{\text{MDL}}(\mathcal{F}_t)$.
-
-The structural loss function dictating the system's structural update loop is defined as:
-$$\mathcal{L}(\mathcal{F}_t) = \alpha \cdot \text{Tr}(\hat{\Delta}_G \rho_t) + \beta \cdot \mathcal{L}_{\text{MDL}}(\mathcal{F}_t)$$
-where $\alpha, \beta \in \mathbb{R}^+$ are architectural regularization weights, and $\text{Tr}(\hat{\Delta}_G \rho_t)$ acts as the localized Dynamic Prediction Error.
-
-### 3.2. Markov Evolution Operator ($\sigma$)
-
-The discrete logical transitions of the axiom set are driven by a stochastic Markov Operator $\sigma$ acting over the probability distribution of valid graph structures $\mathbb{P}(\mathcal{F})$:
-$$\mathbb{P}(\mathcal{F}_{t+1}) = \sigma \left( \mathbb{P}(\mathcal{F}_t), \Delta \kappa_E \right)$$
-where $\Delta \kappa_E$ is the **Algorithmic Influx Rate**, measuring the empirical surprisal stream injected into the object language via localized measurement channels. The evolution pipeline strictly filters mutations based on a Darwinian Information heuristic:
-$$\text{Environmental Surprisal } (\Delta \kappa_E) \rightarrow \text{Graph Mutation } (A_{\text{candidate}}) \rightarrow \text{Meta-Audit Validation} \rightarrow \text{Axiomatic Absorption } (\mathcal{F}_{t+1} = \mathcal{F}_t \cup \{A^*\})$$
+**Algebraic Properties:**
+1.  **Symmetry & Positive Semi-definiteness:** $\hat{\Sigma}_t = \hat{\Sigma}_t^T \quad \text{and} \quad \hat{\Sigma}_t \ge 0$.
+2.  **Prediction Leakage Metric:** The scalar valuation $\text{Tr}(\hat{\Sigma}_t)$ isolates the empirical variance of environmental dynamics escaping the structural predictive capacity of the current graph configuration $\mathcal{F}_t$.
+3.  **Scale Synchronization:** At the initial initialization step ($t=1$), the covariance matrix scale is synchronized by dividing the instantaneous squared residual error by the latent dimension $d$. This prevents catastrophic metric amplitude spikes that unbalance early adaptation loops.
 
 ---
 
-## 4. SEMANTIC HIERARCHY & SPATIAL INTERFACING
+## 3. PROBABILISTIC EMBEDDING & COMPUTABLE OCCAM BOUNDS
 
-To isolate semantic loops and prevent self-referential crashes during recursive self-modification, the agent's cognitive architecture implements a structural isomorphism derived from Tarski’s Hierarchy of Languages:
+### 3.1. Distributional Surprisal Formulation
 
-### 4.1. Multilayer Language Partitioning
+The agent's deterministic predictions are embedded into a conditional Gaussian probability density function:
+$$q_{\mathcal{F}_t}(z_t \,|\, z_{t-1}, a_{t-1}) = \mathcal{N}(f_{\mathcal{A}}(z_{t-1}, a_{t-1}), \sigma^2 I)$$
 
-*   **Object Language Layer ($\Phi_L$):** Registers the physical execution states and raw empirical data logs on a continuous real domain $\mathbb{R}$.
-*   **Meta-Language Layer ($\Phi_M$):** Encodes the internal world model and computes localized inference paths bound by the **Formal Information-Thermodynamic Uncertainty Relation**:
-    $$\Delta H_{\text{vN}}(\rho_{\mathcal{A}}) \cdot \Delta \kappa_E \ge (k_B \ln 2) \cdot \mathcal{L}_{\text{MDL}}(\mathcal{F}_t)$$
-    where $H_{\text{vN}}(\rho_{\mathcal{A}})$ is the Von Neumann entropy of the localized agent state.
-*   **Meta-Meta Language Layer ($\Phi_U$):** An isolated compilation sandbox where candidate mutated code blocks $A_{\text{candidate}}$ are formally checked for type-safety and structural consistency before runtime execution.
+The **Algorithmic Influx Surprisal ($\Delta \kappa_E$)** is defined as the Kullback-Leibler divergence:
+$$\Delta \kappa_E := D_{\text{KL}}\left( p(z_t \,|\, z_{t-1}) \,||\, q_{\mathcal{F}_t}(z_t \,|\, z_{t-1}, a_{t-1}) \right) = \frac{1}{2\sigma^2} \|z_t - f_{\mathcal{A}}(z_{t-1}, a_{t-1})\|^2_2$$
 
-### 4.2. Spacetime Smoothing Interface Conjecture
+### 3.2. Computable Occam Optimization Objective
 
-The architecture establishes a formal geometric conjecture: Continuous $3D+1D$ spacetime is not a foundational ontological reality. Instead, it is a **Geometric Interface** rendered by the agent.
-
-This process is structurally isomorphic to a **Multi-scale Entanglement Renormalization Ansatz (MERA)** tensor network. The hierarchical syntax layers of Tarski are mapped to the bulk dimension of an emergent anti-de Sitter (AdS) space, where smooth geometry operates as an interpolation smoothing function designed to continuous-ize sub-Planckian information singularities registered at the physical boundary $\Phi_L$.
+The structural loss function governing graph transitions is defined via a strict Occam Bound:
+$$\mathcal{L}(\mathcal{F}_t) = \alpha \cdot \text{Tr}(\hat{\Sigma}_t) + \beta \cdot \mathcal{L}_{\text{MDL}}(\mathcal{F}_t)$$
+where $\alpha, \beta \in \mathbb{R}^+$ act as structural regularization hyperparameters balancing empirical predictive risk and network description complexity.
 
 ---
 
-## 5. CORE ALGORITHMIC SPECIFICATION
+## 4. SUB-MANIFOLD INFORMATION GEOMETRY & NATURAL GRADIENT FLOWS
 
-The formal runtime execution loop handling real-time inference, Tarski sandboxing, axiomatic expansion, and Bennett-Landauer Garbage Collection is specified below:
+### 4.1. Bounded Sub-Manifold Fisher Information Matrix (FIM)
 
-```python
-from typing import Set, Any, Dict, List
-import numpy as np
+Let $\theta_{\text{active}} \in \mathbb{R}^p$ be the flattened continuous parameter vector isolated strictly to coordinates where the discrete topological mask equals $1.0$. All dead connections are pruned from the optimization vector, eliminating zero-gradient dimensions. The localized sub-manifold Jacobian matrix $J \in \mathbb{R}^{d \times p}$ is computed via finite differences:
+$$J = \nabla_{\theta_{\text{active}}} f_{\mathcal{A}}(z_{t-1}, a_{t-1})$$
 
-class EmbeddedAgentState:
-    def __init__(self, F_init: Set[Any], M_max: float, threshold: float):
-        self.F_t: Set[Any] = F_init            # Active Axiom Dataflow Graph
-        self.M_current: float = 0.0            # Current physical memory load (bits)
-        self.M_max: float = M_max              # Physical Memory Ceiling Limit
-        self.threshold: float = threshold      # Acceptable Leakage Error Threshold
-        self.rho_t: np.ndarray = None          # Internal density matrix
+The **Sub-manifold Fisher Information Matrix ($F \in \mathbb{R}^{p \times p}$)** is constructed as:
+$$F := \frac{1}{\sigma^2} J^T J + \lambda I_p$$
+where $\lambda I_p$ ($\lambda = 10^{-4}$) is a Tikhonov regularization term ensuring strict positive definiteness and invertibility.
 
-def embedded_agent_runtime_core(agent: EmbeddedAgentState) -> None:
-    """
-    IEEE/ISO Compliant Reference Implementation for SMEA Runtime Loop (V14.0)
-    """
-    alpha, beta, tau_limit = load_system_parameters()
-    
-    while True:
-        # Step 1: Quantum Subspace Dynamical Leakage Measurement
-        agent.rho_t = capture_subspace_density_matrix()
-        Delta_G = compute_quantum_leakage_operator()
-        prediction_error = float(np.trace(np.dot(Delta_G, agent.rho_t)))
-        
-        # Step 2: Axiomatic Expansion triggered upon Local Halting / Error Bounds
-        if prediction_error > agent.threshold:
-            delta_kappa = measure_environmental_surprisal()
-            A_candidates = generate_mutated_logic_graphs(agent.F_t, delta_kappa)
-            
-            best_A = None
-            min_loss = float('inf')
-            
-            # Tarski Sandbox Auditing inside Meta-Language Layer (Phi_U)
-            for A_cand in A_candidates:
-                F_hypothetical = agent.F_t.union({A_cand})
-                loss = alpha * prediction_error + beta * compute_mdl_length(F_hypothetical)
-                
-                if loss < min_loss:
-                    min_loss = loss
-                    best_A = A_cand
-            
-            # Step 3: Axiomatic Absorption & Memory Allocation
-            if best_A is not None:
-                current_loss = alpha * prediction_error + beta * compute_mdl_length(agent.F_t)
-                if min_loss < current_loss:
-                    agent.F_t = agent.F_t.union({best_A})
-                    agent.M_current += compute_mdl_length({best_A})
-        
-        # Step 4: Information-Theoretic Garbage Collection (GC Postulate)
-        if agent.M_current >= agent.M_max:
-            # Sort and isolate high-loss, low-utility nodes via the Tarski Auditor
-            pruned_nodes = identify_low_utility_nodes(agent.F_t)
-            bits_to_erase = compute_mdl_length(pruned_nodes)
-            
-            # Execute Bennett Erasure (Irreversible logical deletion)
-            agent.F_t = agent.F_t.difference(pruned_nodes)
-            agent.M_current -= bits_to_erase
-            
-            # Step 5: Thermodynamic Penalty Dissipation at Object Layer (Phi_L)
-            T_env = measure_ambient_temperature()
-            dissipated_heat = T_env * np.log(2) * bits_to_erase
-            flush_thermal_energy_to_physical_hardware(dissipated_heat)
-            
-        synchronize_vector_clock()
-```
+### 4.2. Natural Gradient Parameter Step
+
+Parameter optimization trajectories follow the invariant information-geometric pathway:
+$$\theta_{\text{active}, t+1} = \theta_{\text{active}, t} - \eta_{\text{adapted}} F^{-1} \nabla_{\theta_{\text{active}}} \mathcal{R}(\mathcal{F}_t)$$
+where $\nabla_{\theta_{\text{active}}} \mathcal{R}(\mathcal{F}_t) = -\frac{1}{\sigma^2} J^T (z_t - f_{\mathcal{A}}(z_{t-1}, a_{t-1}))$ is the standard Euclidean gradient of the empirical risk, and $\eta_{\text{adapted}}$ is the dynamically damped learning rate.
 
 ---
 
-## 6. EMPIRICAL VERIFICATION & FALSIFIABILITY PROTOCOL
+## 5. STATE-SYNCHRONIZED GRAPH GRAMMAR & DRIFT NEUTRALIZATION
 
-To achieve strict scientific falsifiability, the architecture defines a mathematical benchmark environment: The **Multi-Body Infinite-Lattice Fractal POMDP** ($\mathcal{M}_{\text{Fractal}}$).
+### 5.1. Dynamic Graph State Ledger Equations
 
-### 6.1. Environment Formal Spec
+All structural queries are derived via real-time logical operations performed directly on the active connectivity mask tensors ($\mathcal{M}_1, \mathcal{M}_2$):
+$$\mathcal{V}_{\text{active}} = \{ i \in \mathcal{V}_{\text{capacity}} \,|\, \sum_{j} \mathcal{M}_{1}(j, i) > 0 \}$$
+$$\mathcal{V}_{\text{inactive}} = \{ i \in \mathcal{V}_{\text{capacity}} \,|\, \sum_{j} \mathcal{M}_{1}(j, i) = 0 \}$$
 
-$$\mathcal{M} = \langle \mathcal{S}, \mathcal{A}, \mathcal{T}, \mathcal{R}, \Omega, \mathcal{O} \rangle$$
-
-*   **State Space ($\mathcal{S}$):** Non-commutative spin configurations of an infinite quantum lattice displaying fractal self-similarity at phase transition boundaries.
-*   **Transition Function ($\mathcal{T}$):** $P(s_{t+1} | s_t, a_t)$ driven by non-ergodic dynamics, preventing the agent from relying on a static stationary distribution.
-*   **Observation Function ($\mathcal{O}$):** $P(o_t | s_t, a_t)$ where $o_t \in \Omega$. Constructed via a Gaussian random projection matrix mapping $\mathcal{H}_{\infty} \rightarrow \mathcal{H}_t$, guaranteeing structural information loss.
-
-### 6.2. Hypothesis Testing Matrix vs. Modern Baselines
-
-```text
-[M_max Compression Limit] ──> Test Group: SMEA (V14.0) vs. Baselines (MC-AIXI, Gödel Machine, FEP-Active Inference)
-                                  │
-                                  ├──> Metric 1: Sample Efficiency under Phase Transitions (R_cum)
-                                  ├──> Metric 2: Memory Boundary Adherence Error (Γ_adherence)
-                                  └──> Metric 3: Compute-to-Adaptation Energy Ratio (E_ratio)
-```
-
-#### Validation Criteria:
-The SMEA model rejects the null hypothesis of flat, non-hierarchical architectures if and only if empirical trials meet the following conditions:
-*   **Statistical Significance:** $p\text{-value} < 0.01$.
-*   **Effect Size:** Cohen's $d > 0.8$ (large-scale effect magnitude) in architectural stability under recursive logic updates.
-*   **Confidence Interval:** The $95\%$ Confidence Interval (CI) of prediction errors must lie completely below the baseline error rates of non-informational, mechanical pruning engines (e.g., standard Least Recently Used (LRU) memory dops).
+### 5.2. Graph Mutation Operators
+*   **Node Expansion Operator (add_node):** When the algorithmic surprisal $\Delta \kappa_E > 1.5$ and the current size $|\mathcal{V}_{\text{active}}| < \text{capacity}$, the system queries $\mathcal{V}_{\text{inactive}}$, locates the absolute first fully silent column index, and flips its mask parameters to $1.0$, immediately terminating the mutation frame.
+*   **Topological Path Rewiring Operator (rewire_edge):** To force genuine topological jumps without generating empty no-op behaviors, the rewiring mechanism executes a synchronized state swap. It selects the absolute last node in the dynamically computed $\mathcal{V}_{\text{active}}$ set, completely zeros its mask pathways out to force hibernation, and simultaneously activates a brand new channel from the dynamically queried $\mathcal{V}_{\text{inactive}}$ set.
 
 ---
 
-## 7. SYSTEM EPISTEMIC MATRIX
+## 6. COUNTERFACTUAL ABLATION AUDITING FOR MEMORY PRUNING
 
-| Component ID | Structural Primitive | Epistemic Status | Verification Methodology |
-| :--- | :--- | :--- | :--- |
-| **SYS-01** | Bounded Agent Tuple $\{M_{\max}, \tau, \mathcal{F}_t\}$ | Definitional Postulate | Non-applicable (Axiomatic foundation for structural design). |
-| **SYS-02** | Leakage Operator $\hat{\Delta}_G$ | Formal Theorem | Analytical quantum algebraic proof via non-commutativity $[H_{\mathcal{E}}, P_t] \neq 0$. |
-| **SYS-03** | Axiomatic Openness Pipeline | Architectural Postulate | Bounded runtime execution without local infinite halting loop states. |
-| **SYS-04** | Tarski Partitioning ($\Phi_L, \Phi_M, \Phi_U$) | Structural Isomorphism | Statistical decrease in logic graph crash rates ($\Gamma_{\text{collapse}}$) vs Flat models. |
-| **SYS-05** | Spacetime Smoothing Interface | Conjecture | Mathematical motivation; decoupled from immediate core algorithmic verification. |
-| **SYS-06** | Landauer Thermal Penalty | Deductive Corollary | Physical micro-calorimetry tracking of dissipated heat $\Delta Q$ at the physical layer $\Phi_L$. |
+When $\mathcal{L}_{\text{MDL}}(\mathcal{F}_t) \ge M_{\max}$, the agent initiates garbage collection. The functional utility $\omega_i$ of an active hidden component $v_i \in \mathcal{V}_{\text{active}}$ is quantified as:
+$$\omega_i = \frac{\left| \text{Tr}(\hat{\Sigma}_{t \setminus v_i}) - \text{Tr}(\hat{\Sigma}_t) \right|}{\mathcal{L}_{\text{MDL}}(v_i)}$$
+
+where $\hat{\Sigma}_{t \setminus v_i}$ is the counterfactual error covariance matrix evaluated by executing forward passes across the historical inputs window under the strict constraint that all mask entries for column $i$ are temporarily zeroed out. Pruning mechanics permanently disable the single hidden node that minimizes $\omega_i$.
+
+---
+
+## 7. JUSTIFICATION FOR THE TARSKI SEMANTIC HIERARCHY
+
+The cognitive architecture separates information processing into three independent semantic tiers: the Object Language Layer ($\Phi_L$), the Meta-Language Model Layer ($\Phi_M$), and the Meta-Meta Language Sandbox ($\Phi_U$).
+
+Standard programmatic sandboxes (e.g., WASM, LLVM isolation) guard exclusively against memory-access safety violations. They are mathematically blind to semantic self-referential paradoxes.
+
+When a self-modifying agent alters its own predictive code, a flat architecture permits the optimization loop to evaluate its own truth criteria within the same language tier, leading to reward hacking. By enforcing that candidate graph mutations $A_{\text{candidate}}$ are compiled, simulated, and audited entirely within the isolated Sandbox $\Phi_U$ (which possesses a higher logical order than $\Phi_M$), the agent verifies structural consistency and Occam bounds from a detached semantic tier before structural absorption occurs.
+
+---
+
+## 8. BOUNDED RATIONALITY & FUNCTIONAL LANDAUER DAMPING HEURISTICS
+
+Irreversible logical deletion during garbage collection generates a minimum theoretical energy cost: $\Delta Q_{\text{Landauer}} = k_B T \ln 2 \cdot \Delta \text{bits}$. This parameter acts as a functional damping signal that directly inflates the active adaptation threshold:
+$$\text{threshold}_{\text{dynamic}} = \text{threshold}_{\text{base}} + \gamma \cdot \Delta Q_{\text{Landauer}}$$
+where $\gamma = 10^{21}$ is the Thermodynamic Control Gain.
+
+An agent that has recently undergone memory pruning suffers a sharp inflation of its `dynamic_threshold`, rendering it temporarily conservative. This dampens its sensitivity to brief environmental noise, stabilizes the topological search space, and prevents chaotic mutation divergence loops under extreme resource pressure.
+
+---
+
+## 9. VERIFIABLE SYNTHETIC BENCHMARK PROTOCOL
+
+The agent is tested against a synthetic signal generator that oscillates dynamically between two structurally distinct mathematical regimes, forcing the system to utilize graph mutations rather than simple weight updates:
+*   **Regime A:** $z_{\text{target}} = \tanh(x \cdot W_A) + \epsilon$
+*   **Regime B:** $z_{\text{target}} = \sin(x \cdot W_B \cdot 2.0) + \epsilon$
+where $\epsilon \sim \mathcal{N}(0, 0.05^2)$.
+
+### Standardized Baseline Matrix
+The self-modifying architecture is benchmarked directly against three internal baseline configurations running on identical resource footprints ($M_{\max} = 2000$ bits, $\text{capacity} = 16$ hidden units, $\eta = 0.05$):
+1.  **Fixed-topology MLP:** Structural masks locked permanently at maximum capacity ($\mathcal{M}_1, \mathcal{M}_2 = 1.0$). Natural gradient optimization runs over the entire parameter space.
+2.  **Random-restart MLP:** Topology remains static, but re-initializes all continuous parameters $\theta$ randomly whenever prediction leakage breaches the threshold.
+3.  **LRU Pruning Agent:** Maintains structural mutation, but replaces counterfactual ablation pruning with a standard Least Recently Used (LRU) node deletion heuristic.
+
+### Statistical Validation Criteria
+Performance profiles are evaluated using Welch's t-test, Cohen's d effect sizes, and 95% Confidence Intervals (95% CI) derived via non-parametric bootstrapping across 10,000 resamples.
 
 ---
 
 ## 📁 Repository Structure
 
 ```text
-omnipresent-stream/
+omnepresent-stream/
 │
 ├── .gitignore               # Excludes environment overrides and credentials
 ├── LICENSE                  # AGPL-3.0 License
-├── README.md                # System specification architecture document
+├── README.md                # System specification architecture document (v20.0)
 │
 ├── web_portal/              # Frontend presentation layer
-│   └── index.html           # Single-file HTML5/JS dashboard with live Matrix simulation
+│   └── index.html           # Single-file HTML5/JS dashboard with live v20.0 simulator
 │
 └── core_engine/             # Backend computational engine
     ├── __init__.py          # Module exports
-    └── stream_physics.py    # Python implementation of the v14.0 SMEA runtime loop
+    └── stream_physics.py    # Python implementation of the v20.0 engine & benchmark suite
 ```
 
 ---
@@ -245,18 +176,18 @@ omnipresent-stream/
 ## 🚀 Getting Started
 
 ### 1. Launching the Frontend Visualizer
-The web portal is self-contained. It simulates the matrix operations ($\hat{\Delta}_G$, density matrices $\rho_t$, Tarski audits, and Landauer pulses) entirely client-side.
+The web portal is self-contained. It simulates the v20.0 information-geometric operations entirely client-side.
 1. Navigate to the `web_portal/` directory.
-2. Open `index.html` in any web browser.
-3. Configure your API credentials inside the secure local credentials panel to authorize the Y3 OS Console. (All API keys are strictly contained inside your browser's local sandbox storage).
+2. Open `index.html` in any modern web browser.
+3. Configure your API credentials inside the secure local credentials panel to authorize the Y3 OS Console.
 
 ### 2. Running the Backend Engine
-The Python simulator evaluates the complex matrices, leakage operator, and Bennett pruning sequences.
+The Python simulator evaluates the complex matrices, natural gradients, and runs the standardized benchmark comparison suite.
 1. Install `numpy` dependency:
    ```bash
    pip3 install numpy
    ```
-2. Execute the runtime engine:
+2. Execute the engine and scientific benchmark suite:
    ```bash
    python3 core_engine/stream_physics.py
    ```

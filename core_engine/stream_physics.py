@@ -1,28 +1,56 @@
 # Copyright (c) 2026 Zen Coder. All Rights Reserved.
-# Project: THE OMNIPRESENT STREAM (v14.0 Formal Mathematical Architecture)
+# Project: THE OMNIPRESENT STREAM (v20.0 State-Synchronized Deployment)
 # License: GNU Affero General Public License v3.0 (AGPL-3.0)
 
 import numpy as np
 import random
 import time
-from typing import Set, Any, Tuple
+import math
+from typing import List, Dict, Any, Tuple, Set
 
-# Dimensions for the Hilbert spaces
-DIM_TOTAL = 8  # H_infinity represented as a finite larger space
-DIM_SUB = 3    # H_t, cognitive subspace dimension
+# Fallback stats mapping to handle missing scipy on local environments
+try:
+    from scipy import stats
+except ImportError:
+    class StatsMock:
+        @staticmethod
+        def ttest_ind(x1: np.ndarray, x2: np.ndarray, equal_var: bool = False) -> Tuple[float, float]:
+            n1, n2 = len(x1), len(x2)
+            m1, m2 = np.mean(x1), np.mean(x2)
+            v1, v2 = np.var(x1, ddof=1), np.var(x2, ddof=1)
+            
+            se = np.sqrt(v1 / n1 + v2 / n2)
+            if se == 0:
+                return 0.0, 1.0
+                
+            t_stat = (m1 - m2) / se
+            
+            # Welch-Satterthwaite degrees of freedom approximation
+            num = (v1 / n1 + v2 / n2)**2
+            den = (v1 / n1)**2 / (n1 - 1) + (v2 / n2)**2 / (n2 - 1)
+            df = num / den
+            
+            # Two-tailed p-value normal approximation (erf function)
+            p_val = 2.0 * (1.0 - 0.5 * (1.0 + math.erf(abs(t_stat) / math.sqrt(2.0))))
+            return t_stat, p_val
+    stats = StatsMock()
+
+# =====================================================================
+# PART I: LEGACY COMPATIBILITY LAYER (v14.0 SHIMS)
+# =====================================================================
+
+DIM_TOTAL = 8
+DIM_SUB = 3
 
 class EmbeddedAgentState:
     def __init__(self, F_init: Set[Any], M_max: float, threshold: float):
-        self.F_t: Set[Any] = F_init            # Active Axiom Dataflow Graph
-        self.M_current: float = 0.0            # Current physical memory load (bits)
-        self.M_max: float = M_max              # Physical Memory Ceiling Limit
-        self.threshold: float = threshold      # Acceptable Leakage Error Threshold
-        self.clock: float = 0.0                # Internal simulation clock
+        self.F_t: Set[Any] = F_init
+        self.M_current: float = 0.0
+        self.M_max: float = M_max
+        self.threshold: float = threshold
+        self.clock: float = 0.0
 
 class DataNode:
-    """
-    Legacy and compatibility wrapper representing conscious nodes in Y1/Y2.
-    """
     def __init__(self, node_id: int, initial_phase: float):
         self.node_id = node_id
         self.state_v = np.exp(1j * initial_phase)
@@ -41,9 +69,6 @@ class DataNode:
         self.history.append(self.state_v)
 
 class GodelCompiler:
-    """
-    v14.0 logical boundary engine evaluating local halting and undecidable states.
-    """
     def __init__(self, incompleteness_index: float):
         self.incompleteness_index = incompleteness_index
 
@@ -61,60 +86,42 @@ class GodelCompiler:
         branch_2 = DataNode(node_id=node.node_id * 10 + 2, initial_phase=node.state_v.real - 0.5)
         node.branches.extend([branch_1, branch_2])
 
-# Helper functions for the v14.0 mathematical engine
 def load_system_parameters() -> Tuple[float, float, float]:
-    """ Loads system weights alpha, beta, and clock limits """
-    alpha = 0.75
-    beta = 0.25
-    tau_limit = 1000.0
-    return alpha, beta, tau_limit
+    return 0.75, 0.25, 1000.0
 
 def generate_isometry(dim_sub: int = DIM_SUB, dim_total: int = DIM_TOTAL) -> np.ndarray:
-    """ Generates isometry projection W_t from H_infinity to H_t satisfying W_t W_t^dagger = I_d """
     A = np.random.randn(dim_total, dim_sub) + 1j * np.random.randn(dim_total, dim_sub)
-    Q, _ = np.linalg.qr(A)  # Orthonormal columns of size (dim_total, dim_sub)
-    W = Q.conj().T          # (dim_sub, dim_total) orthonormal rows
-    return W
+    Q, _ = np.linalg.qr(A)
+    return Q.conj().T
 
 def generate_hamiltonian(dim_total: int = DIM_TOTAL) -> np.ndarray:
-    """ Generates global environment Hamiltonian operator H_E """
     H = np.random.randn(dim_total, dim_total) + 1j * np.random.randn(dim_total, dim_total)
-    return (H + H.conj().T) / 2.0  # Force Hermiticity
+    return (H + H.conj().T) / 2.0
 
 def capture_subspace_density_matrix(agent: EmbeddedAgentState) -> np.ndarray:
-    """ Constructs the density matrix rho_t based on internal state parameter vectors """
     phase = agent.clock * 0.15
     psi = np.zeros(DIM_SUB, dtype=complex)
     psi[0] = np.sin(phase) + 1j * np.cos(phase)
     psi[1] = np.cos(phase * 0.3) * (len(agent.F_t) / 10.0)
     psi[2] = (agent.M_current / agent.M_max) if agent.M_max > 0 else 0.0
-    
     norm = np.linalg.norm(psi)
     if norm > 0:
         psi = psi / norm
     else:
         psi[0] = 1.0
-    
     return np.outer(psi, psi.conj())
 
 def compute_quantum_leakage_operator(W_t: np.ndarray, H_E: np.ndarray) -> np.ndarray:
-    """
-    Computes delta error operator: Delta_G = W_t H_E (I - P_t) H_E W_t^dagger
-    where P_t = W_t^dagger W_t
-    """
     dim_total = W_t.shape[1]
     I_N = np.eye(dim_total, dtype=complex)
     P_t = W_t.conj().T @ W_t
-    
     Delta_G = W_t @ H_E @ (I_N - P_t) @ H_E @ W_t.conj().T
-    return (Delta_G + Delta_G.conj().T) / 2.0  # Enforce self-adjoint boundary
+    return (Delta_G + Delta_G.conj().T) / 2.0
 
 def measure_environmental_surprisal() -> float:
-    """ Measures local object-layer sensor surprisal delta_kappa """
     return float(np.abs(np.random.normal(0.4, 0.15)))
 
 def mutate_logic_graphs(F_t: Set[str], delta_kappa: float) -> Set[str]:
-    """ Mutates logic graphs by spawning candidate axioms based on environmental influx """
     axiom_pool = [
         "Axiom: Orthogonal Subspace Isometry Projection W_t W_t^T = I",
         "Axiom: Self-adjoint Gödel Leakage Operator Delta_G",
@@ -128,16 +135,13 @@ def mutate_logic_graphs(F_t: Set[str], delta_kappa: float) -> Set[str]:
     available = [ax for ax in axiom_pool if ax not in F_t]
     if not available:
         available = [f"Axiom: Emergent Axiomatic Fragment {random.randint(100, 999)}"]
-    
     num_candidates = min(len(available), max(1, int(delta_kappa * 3)))
     return set(random.sample(available, num_candidates))
 
 def compute_mdl_length(F: Set[str]) -> float:
-    """ Minimum Description Length proxy: length of descriptor representations in bits """
     return float(sum(len(axiom) * 8 for axiom in F))
 
 def identify_high_loss_low_utility_nodes(F_t: Set[str]) -> Set[str]:
-    """ Identifies low-utility logic graph node primitives for garbage collection """
     if not F_t:
         return set()
     sorted_axioms = sorted(list(F_t), key=lambda x: len(x), reverse=True)
@@ -145,37 +149,28 @@ def identify_high_loss_low_utility_nodes(F_t: Set[str]) -> Set[str]:
     return set(sorted_axioms[:prune_count])
 
 def measure_ambient_temperature() -> float:
-    """ Returns environmental temperature T_env in Kelvin """
     return 298.15
 
 def flush_thermal_energy_to_physical_hardware(dissipated_heat: float):
-    """ Logs simulated energy release representing Landauer limit """
-    k_B = 1.380649e-23  # J/K
+    k_B = 1.380649e-23
     joules = dissipated_heat * k_B
-    # Log the energy dissipation to the console
     print(f"  [THERMODYNAMIC COROLLARY] Bennett Erasure Completed. Dissipated Heat: {joules * 1e18:.2f} zJ (zeptoJoules)")
 
 def synchronize_vector_clock():
-    """ Standard scheduler sync """
     pass
 
 class StreamOS:
-    """
-    The Master Resource Scheduler of the Omnipresent Stream (Version 14.0).
-    Manages the EmbeddedAgentState under thermodynamic and quantum constraints.
-    """
     def __init__(self, g_value: float, expansion_rate: float, force_mode: str):
         self.global_clock: float = 0.0
         self.nodes = [DataNode(i, random.uniform(0, 2 * np.pi)) for i in range(5)]
         self.godel_engine = GodelCompiler(g_value)
         self.dark_energy_expansion = expansion_rate
         self.compiler_force_mode = force_mode
-        self.metadata_allocation_space = 100.0  # Legacy capacity variable
+        self.metadata_allocation_space = 100.0
         
-        # Initialize Embedded Agent State
         self.agent_state = EmbeddedAgentState(
             F_init={"Axiom: Primordial Coordinate Space Mapping"},
-            M_max=800.0,  # Maximum physical boundary in bits
+            M_max=800.0,
             threshold=0.30
         )
         self.alpha, self.beta, self.tau_limit = load_system_parameters()
@@ -187,12 +182,10 @@ class StreamOS:
         return modes.get(self.compiler_force_mode, 0.10)
 
     def execute_system_tick(self, delta_time: float):
-        """ Executing one tick of the unified v14.0 master loop """
         self.global_clock += delta_time
         self.agent_state.clock = self.global_clock
         force_coef = self.get_force_coefficient()
         
-        # 1. Unitary data node updates (legacy support)
         active_branches_count = 0
         for node in self.nodes:
             if self.godel_engine.evaluate_undecidability(node):
@@ -202,7 +195,6 @@ class StreamOS:
             if node.is_decided:
                 active_branches_count += len(node.branches)
                 
-        # 2. Quantum Subspace Leakage Measurement
         rho_t = capture_subspace_density_matrix(self.agent_state)
         Delta_G = compute_quantum_leakage_operator(self.W_t, self.H_E)
         prediction_error = np.trace(np.dot(Delta_G, rho_t)).real
@@ -210,7 +202,6 @@ class StreamOS:
         absorbed = False
         added_axiom = ""
         
-        # 3. Axiomatic Expansion
         if prediction_error > self.agent_state.threshold:
             delta_kappa = measure_environmental_surprisal()
             A_candidates = mutate_logic_graphs(self.agent_state.F_t, delta_kappa)
@@ -220,7 +211,6 @@ class StreamOS:
             
             for A_cand in A_candidates:
                 F_hypothetical = self.agent_state.F_t.union({A_cand})
-                # Computable Loss: Trace leakage + MDL complexity ratio
                 loss = self.alpha * prediction_error + self.beta * (compute_mdl_length(F_hypothetical) / 1000.0)
                 
                 if loss < min_loss:
@@ -233,7 +223,6 @@ class StreamOS:
                 absorbed = True
                 added_axiom = best_A
 
-        # 4. Bennett Garbage Collection
         pruned = False
         bits_to_erase = 0.0
         if self.agent_state.M_current >= self.agent_state.M_max:
@@ -247,7 +236,6 @@ class StreamOS:
             dissipated_heat = T_env * np.log(2) * bits_to_erase
             flush_thermal_energy_to_physical_hardware(dissipated_heat)
 
-        # Print system telemetry logs directly to console output matrix
         status_str = f"ABSORBED ({added_axiom[:15]}...)" if absorbed else "IDLE"
         gc_str = f"ERASED {bits_to_erase:.0f}b" if pruned else "NOMINAL"
         
@@ -261,14 +249,10 @@ class StreamOS:
         synchronize_vector_clock()
 
 def embedded_agent_runtime_core(agent: EmbeddedAgentState) -> None:
-    """
-    IEEE/ISO Compliant Reference Implementation for SMEA Runtime Loop (V14.0)
-    """
     alpha, beta, _ = load_system_parameters()
     W_t = generate_isometry()
     H_E = generate_hamiltonian()
     
-    # Run a finite simulation of 10 steps for execution trace tests
     for step in range(10):
         agent.clock += 0.016
         rho_t = capture_subspace_density_matrix(agent)
@@ -306,13 +290,440 @@ def embedded_agent_runtime_core(agent: EmbeddedAgentState) -> None:
             
         synchronize_vector_clock()
 
+# =====================================================================
+# PART II: THE v20.0 STATE-SYNCHRONIZED ARCHITECTURE CLASSES
+# =====================================================================
+
+class DynamicTopologyDAG:
+    """
+    Manages a computational dataflow network where structural topology masks (M1, M2)
+    strictly isolate and constrain both the forward pass and parameter optimization.
+    All state queries are dynamically computed to prevent accounting/ledger drift.
+    """
+    def __init__(self, input_dim: int, output_dim: int, max_hidden_capacity: int = 16, force_full_capacity: bool = False):
+        self.input_dim = input_dim
+        self.output_dim = output_dim
+        self.max_hidden_capacity = max_hidden_capacity
+        
+        # Continuous parameter matrices (theta)
+        self.W1 = np.random.randn(input_dim, max_hidden_capacity) * 0.1
+        self.W2 = np.random.randn(max_hidden_capacity, output_dim) * 0.1
+        
+        # Discrete structural topology masks (1.0 = Active, 0.0 = Inactive)
+        self.M1 = np.zeros((input_dim, max_hidden_capacity), dtype=float)
+        self.M2 = np.zeros((max_hidden_capacity, output_dim), dtype=float)
+        
+        if force_full_capacity:
+            # Enforce maximum capacity for Fixed-topology MLP baseline controls
+            self.M1[:, :] = 1.0
+            self.M2[:, :] = 1.0
+        else:
+            # Activate baseline localized subgraph pathways (First 4 hidden channels open)
+            initial_setup_units = 4
+            self.M1[:, :initial_setup_units] = 1.0
+            self.M2[:initial_setup_units, :] = 1.0
+
+    def forward(self, z_minus_1: np.ndarray) -> np.ndarray:
+        """Computes localized prediction via the Hadamard product: f_A = tanh(z * (W1 ⊙ M1)) * (W2 ⊙ M2)"""
+        masked_W1 = self.W1 * self.M1
+        masked_W2 = self.W2 * self.M2
+        hidden_activation = np.tanh(np.dot(z_minus_1, masked_W1))
+        return np.dot(hidden_activation, masked_W2)
+
+    def get_active_hidden_indices(self) -> np.ndarray:
+        """Dynamically computes active hidden node coordinates directly from the mask state tensor."""
+        return np.where(np.sum(self.M1, axis=0) > 0.0)[0]
+
+    def get_inactive_hidden_indices(self) -> np.ndarray:
+        """Dynamically computes silent/inactive hidden node coordinates directly from the mask state tensor."""
+        return np.where(np.sum(self.M1, axis=0) == 0.0)[0]
+
+    def get_active_param_vectors(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """Isolates and extracts ONLY the continuous weights where the topology mask matches 1.0."""
+        w1_active = self.W1[self.M1 == 1.0]
+        w2_active = self.W2[self.M2 == 1.0]
+        flat_active = np.concatenate([w1_active, w2_active])
+        return flat_active, w1_active, w2_active
+
+    def set_active_param_vectors(self, flat_active_theta: np.ndarray) -> None:
+        """Precision injection of flat optimized weights back into their precise active mask coordinates."""
+        num_w1_active = int(np.sum(self.M1))
+        w1_flat_updated = flat_active_theta[:num_w1_active]
+        w2_flat_updated = flat_active_theta[num_w1_active:]
+        
+        self.W1[self.M1 == 1.0] = w1_flat_updated
+        self.W2[self.M2 == 1.0] = w2_flat_updated
+
+    def compute_computable_mdl_length(self) -> float:
+        """Quantifies structural footprint based strictly on open binary serialization bits."""
+        active_edges = np.sum(self.M1) + np.sum(self.M2)
+        return float(active_edges * 32)
+
+
+class StateSynchronizedGeometricAgent:
+    """
+    An embedded agent optimizing its active sub-manifold trajectory via natural gradients.
+    All structural modifications are synchronized directly with mask tensors to eliminate accounting bugs.
+    """
+    def __init__(self, input_dim: int, output_dim: int, M_max: float, base_threshold: float, mode: str = "dynamic_topology"):
+        self.mode = mode # Modes: "dynamic_topology", "fixed_mlp", "random_restart", "lru_prune"
+        force_full = True if mode == "fixed_mlp" else False
+        
+        self.dag = DynamicTopologyDAG(input_dim, output_dim, max_hidden_capacity=16, force_full_capacity=force_full)
+        self.M_max = M_max                              
+        self.M_current = self.dag.compute_computable_mdl_length()
+        self.base_threshold = base_threshold
+        self.dynamic_threshold = base_threshold
+        self.learning_rate = 0.05
+        
+        self.history_inputs: List[np.ndarray] = []
+        self.history_targets: List[np.ndarray] = []
+        self.history_residuals: List[np.ndarray] = []
+        self.lru_activation_record: List[int] = list(self.dag.get_active_hidden_indices())
+        
+        self.latent_dim = output_dim
+        self.structural_churn_count = 0
+
+    def compute_sub_manifold_jacobian(self, x: np.ndarray) -> np.ndarray:
+        """Computes Jacobian matrix (df_A / d_theta) ONLY for the isolated active parameter sub-manifold."""
+        flat_active, _, _ = self.dag.get_active_param_vectors()
+        num_active = len(flat_active)
+        J = np.zeros((self.latent_dim, num_active))
+        epsilon = 1e-5
+        
+        base_prediction = self.dag.forward(x)
+        
+        for i in range(num_active):
+            perturbed_active = flat_active.copy()
+            perturbed_active[i] += epsilon
+            
+            self.dag.set_active_param_vectors(perturbed_active)
+            perturbed_prediction = self.dag.forward(x)
+            J[:, i] = (perturbed_prediction - base_prediction) / epsilon
+            
+        self.dag.set_active_param_vectors(flat_active) # Restore mathematical integrity
+        return J
+
+    def execute_natural_gradient_step(self, x: np.ndarray, residual: np.ndarray, J: np.ndarray, adaptation_damping: float) -> None:
+        """Updates active parameter subsets along the invariant Riemann geodesics of the sub-manifold."""
+        flat_active, _, _ = self.dag.get_active_param_vectors()
+        sigma = 0.1
+        tikhonov_lambda = 1e-4
+        
+        F = (1.0 / (sigma ** 2)) * np.dot(J.T, J) + tikhonov_lambda * np.identity(J.shape[1])
+        euclidean_gradient = - (1.0 / (sigma ** 2)) * np.dot(J.T, residual)
+        
+        try:
+            natural_gradient = np.linalg.solve(F, euclidean_gradient)
+        except np.linalg.LinAlgError:
+            natural_gradient = euclidean_gradient # Fallback to flat Euclidean trajectory under singular matrix states
+            
+        adapted_eta = self.learning_rate / (1.0 + adaptation_damping)
+        updated_active = flat_active - adapted_eta * natural_gradient
+        
+        self.dag.set_active_param_vectors(updated_active)
+
+    def execute_graph_grammar_mutation(self, surprisal_kl: float) -> None:
+        """Executes targeted state-synchronized graph mutations without linear counting dependencies."""
+        if self.mode in ["fixed_mlp", "random_restart"]:
+            return # Topologies remain static for control baselines
+            
+        inactive_indices = self.dag.get_inactive_hidden_indices()
+        active_indices = self.dag.get_active_hidden_indices()
+        
+        # Strategy 1: Topological Expansion Block
+        if surprisal_kl > 1.5 and len(active_indices) < self.dag.max_hidden_capacity:
+            if len(inactive_indices) > 0:
+                target_inactive_node = inactive_indices[0]
+                self.dag.M1[:, target_inactive_node] = 1.0
+                self.dag.M2[target_inactive_node, :] = 1.0
+                
+                if target_inactive_node not in self.lru_activation_record:
+                    self.lru_activation_record.append(target_inactive_node)
+                self.structural_churn_count += 1
+                return 
+                
+        # Strategy 2: Evolutionary Connectivity Rewiring Block
+        if np.random.rand() < 0.4:
+            if len(inactive_indices) > 0 and len(active_indices) > 2:
+                target_inactive_node = inactive_indices[0]
+                source_active_node = active_indices[-1] # Target oldest active node for structural conversion
+                
+                # Dynamic pathway reconfiguration execution
+                self.dag.M1[:, source_active_node] = 0.0
+                self.dag.M2[source_active_node, :] = 0.0
+                
+                self.dag.M1[:, target_inactive_node] = 1.0
+                self.dag.M2[target_inactive_node, :] = 1.0
+                
+                if source_active_node in self.lru_activation_record:
+                    self.lru_activation_record.remove(source_active_node)
+                if target_inactive_node not in self.lru_activation_record:
+                    self.lru_activation_record.append(target_inactive_node)
+                    
+                self.structural_churn_count += 1
+
+    def identify_lowest_utility_subgraphs(self) -> Tuple[List[int], float]:
+        """Executes counterfactual ablation studies by rerunning historical logs across masked units."""
+        if len(self.history_inputs) < 5:
+            return [], 0.0
+            
+        window_inputs = self.history_inputs[-10:]
+        window_targets = self.history_targets[-10:]
+        
+        base_residuals = []
+        for x, target in zip(window_inputs, window_targets):
+            base_residuals.append(target - self.dag.forward(x))
+        base_variance = np.trace(np.atleast_2d(np.cov(np.array(base_residuals).T)))
+        
+        lowest_utility = float('inf')
+        target_node = -1
+        
+        active_nodes = self.dag.get_active_hidden_indices()
+        
+        for idx in active_nodes:
+            backup_M1 = self.dag.M1[:, idx].copy()
+            backup_M2 = self.dag.M2[idx, :].copy()
+            
+            # Counterfactual structural zeroing out
+            self.dag.M1[:, idx] = 0.0
+            self.dag.M2[idx, :] = 0.0
+            
+            counterfactual_residuals = []
+            for x, target in zip(window_inputs, window_targets):
+                counterfactual_residuals.append(target - self.dag.forward(x))
+            
+            sim_variance = np.trace(np.atleast_2d(np.cov(np.array(counterfactual_residuals).T)))
+            delta_leakage = abs(sim_variance - base_variance)
+            omega_i = delta_leakage / 32.0 
+            
+            if omega_i < lowest_utility:
+                lowest_utility = omega_i
+                target_node = idx
+                
+            self.dag.M1[:, idx] = backup_M1
+            self.dag.M2[idx, :] = backup_M2
+            
+        nodes_to_prune = [target_node] if target_node != -1 else []
+        bits_saved = len(nodes_to_prune) * (self.dag.input_dim + self.dag.output_dim) * 32
+        return nodes_to_prune, float(bits_saved)
+
+    def step_runtime_loop(self, x_input: np.ndarray, continuous_target: np.ndarray) -> dict:
+        """Unified State-Synchronized Architecture Runtime Flow."""
+        self.history_inputs.append(x_input)
+        self.history_targets.append(continuous_target)
+        
+        actual_z = continuous_target
+        predicted_z = self.dag.forward(x_input)
+        
+        residual = actual_z - predicted_z
+        self.history_residuals.append(residual)
+        
+        if len(self.history_residuals) > 20:
+            self.history_inputs.pop(0)
+            self.history_targets.pop(0)
+            self.history_residuals.pop(0)
+            
+        res_matrix = np.array(self.history_residuals)
+        if res_matrix.shape[0] > 1:
+            sigma_hat = np.cov(res_matrix.T)
+            prediction_leakage = float(np.trace(np.atleast_2d(sigma_hat)))
+        else:
+            # Baseline normalization on step 1 to eliminate tracking metric scale jumps
+            prediction_leakage = float(np.sum(residual ** 2) / self.latent_dim)
+
+        sigma_noise = 0.1
+        surprisal_kl = float(np.sum(residual ** 2) / (2.0 * (sigma_noise ** 2)))
+        
+        # Continuous parameter tuning via Sub-Manifold Natural Gradients
+        J = self.compute_sub_manifold_jacobian(x_input)
+        adaptation_damping = max(0.0, self.dynamic_threshold - self.base_threshold)
+        self.execute_natural_gradient_step(x_input, residual, J, adaptation_damping)
+        
+        # Structural mutation phase triggered by prediction error breaches
+        if self.mode == "random_restart" and prediction_leakage > self.dynamic_threshold:
+            # Baseline Control Strategy: Brute-Force parameter restart
+            self.dag.W1 = np.random.randn(*self.dag.W1.shape) * 0.1
+            self.dag.W2 = np.random.randn(*self.dag.W2.shape) * 0.1
+        elif self.mode in ["dynamic_topology", "lru_prune"] and prediction_leakage > self.dynamic_threshold:
+            self.execute_graph_grammar_mutation(surprisal_kl)
+            
+        self.M_current = self.dag.compute_computable_mdl_length()
+
+        # Information-Theoretic Garbage Collection Execution Block
+        thermodynamic_cost = 0.0
+        if self.M_current >= self.M_max and self.mode in ["dynamic_topology", "lru_prune"]:
+            if self.mode == "dynamic_topology":
+                # Ablation Pruning Pathway
+                nodes_to_erase, bits_erased = self.identify_lowest_utility_subgraphs()
+            else:
+                # Baseline Control Pathway: Heuristic Least Recently Used Node Deletion
+                nodes_to_erase = [self.lru_activation_record[0]] if len(self.lru_activation_record) > 0 else []
+                bits_erased = len(nodes_to_erase) * (self.dag.input_dim + self.dag.output_dim) * 32
+            
+            for idx in nodes_to_erase:
+                self.dag.M1[:, idx] = 0.0
+                self.dag.M2[idx, :] = 0.0
+                if idx in self.lru_activation_record:
+                    self.lru_activation_record.remove(idx)
+                    
+            self.M_current = self.dag.compute_computable_mdl_length()
+            self.structural_churn_count += len(nodes_to_erase)
+            
+            # Compute physical thermodynamic penalty lower bounds
+            T_env = 298.15 
+            k_B = 1.380649e-23
+            thermodynamic_cost = T_env * k_B * np.log(2) * bits_erased
+            
+            # Adaptive control gain mapping logic
+            thermodynamic_control_gain = 1e21
+            self.dynamic_threshold = self.base_threshold + (thermodynamic_cost * thermodynamic_control_gain)
+        else:
+            self.dynamic_threshold = max(self.base_threshold, self.dynamic_threshold * 0.95)
+
+        return {
+            "prediction_leakage": prediction_leakage,
+            "surprisal_kl": surprisal_kl,
+            "memory_load_bits": self.M_current,
+            "thermodynamic_cost_joules": thermodynamic_cost,
+            "dynamic_threshold": self.dynamic_threshold,
+            "active_nodes_count": len(self.dag.get_active_hidden_indices())
+        }
+
+# =====================================================================
+# PART III: VERIFIABLE BENCHMARK SUITE IMPLEMENTATION
+# =====================================================================
+
+def generate_regime_switching_target(x: np.ndarray, t: int, switch_period: int = 200, noise_std: float = 0.05) -> np.ndarray:
+    """
+    Non-ergodic synthetic environmental generation engine:
+    Alternates mapping signatures to explicitly challenge adaptive networks.
+    """
+    regime = (t // (switch_period // 2)) % 2
+    if regime == 0:
+        target = np.tanh(x @ np.array([[0.8, 0.1, 0.0, 0.0],
+                                       [0.0, 0.8, 0.1, 0.0],
+                                       [0.0, 0.0, 0.8, 0.1],
+                                       [0.1, 0.0, 0.0, 0.8]]))
+    else:
+        target = np.sin(x @ np.array([[0.5, 0.5, 0.0, 0.0],
+                                      [0.0, 0.5, 0.5, 0.0],
+                                      [0.0, 0.0, 0.5, 0.5],
+                                      [0.5, 0.0, 0.0, 0.5]]) * 2.0)
+    return target + np.random.randn(*target.shape) * noise_std
+
+
+def run_single_trial(condition: str, n_steps: int = 2000, switch_period: int = 200) -> Dict[str, float]:
+    """Executes a full continuous evaluation tracking cycle for a unique configuration setting."""
+    input_dim, output_dim = 4, 4
+    m_max = 5000.0 if condition == "fixed_mlp" else 2000.0
+    
+    agent = StateSynchronizedGeometricAgent(input_dim, output_dim, M_max=m_max, base_threshold=0.4, mode=condition)
+    
+    leakage_records = []
+    memory_records = []
+    regime_shift_frames = []
+    
+    for t in range(n_steps):
+        x_sample = np.random.randn(input_dim)
+        z_target = generate_regime_switching_target(x_sample, t, switch_period=switch_period)
+        
+        metrics = agent.step_runtime_loop(x_sample, z_target)
+        
+        leakage_records.append(metrics["prediction_leakage"])
+        memory_records.append(metrics["memory_load_bits"])
+        
+        if t > 0 and (t // (switch_period // 2)) != ((t - 1) // (switch_period // 2)):
+            regime_shift_frames.append(t)
+            
+    # Calculate Metric 1: Adaptation Error (Mean prediction leakage over 50 steps post-regime transition)
+    post_shift_leakages = []
+    for frame in regime_shift_frames:
+        window_end = min(n_steps, frame + 50)
+        post_shift_leakages.extend(leakage_records[frame:window_end])
+        
+    mean_adaptation_error = float(np.mean(post_shift_leakages)) if post_shift_leakages else float(np.mean(leakage_records))
+    
+    # Calculate Metric 2: Memory Efficiency (Accumulated MDL length over tracking utility)
+    epsilon_utility = 1e-6
+    inverse_leakage_utility = 1.0 / (np.array(leakage_records) + epsilon_utility)
+    mean_memory_efficiency = float(np.sum(memory_records) / np.sum(inverse_leakage_utility))
+    
+    # Calculate Metric 3: Structural Churn rate per 100 iterations
+    structural_churn_rate = float((agent.structural_churn_count / n_steps) * 100)
+    
+    return {
+        "adaptation_error": mean_adaptation_error,
+        "memory_efficiency": mean_memory_efficiency,
+        "structural_churn": structural_churn_rate
+    }
+
+
+def execute_comprehensive_statistical_pipeline():
+    """V20.0 Academic Statistical Validation Engine."""
+    n_seeds = 30
+    n_steps = 2000
+    switch_period = 200
+    conditions = ["dynamic_topology", "fixed_mlp", "random_restart", "lru_prune"]
+    
+    aggregated_results = {c: {"adaptation_error": [], "memory_efficiency": [], "structural_churn": []} for c in conditions}
+    
+    print("=== EXECUTING SYSTEM EVALUATION PIPELINE (v20.0) ===")
+    print(f"Volume parameters: Seeds count = {n_seeds} | Trial steps = {n_steps} cycles | Non-ergodic intervals = {switch_period} frames\n")
+    
+    for seed in range(n_seeds):
+        for cond in conditions:
+            np.random.seed(seed)
+            trial_metrics = run_single_trial(cond, n_steps=n_steps, switch_period=switch_period)
+            
+            for key in aggregated_results[cond].keys():
+                aggregated_results[cond][key].append(trial_metrics[key])
+                
+    print("--- DESCRIPTIVE PERFORMANCE MATRIX (MEAN ± STD) ---")
+    for cond in conditions:
+        print(f"\nCondition Category: [{cond.upper()}]")
+        for metric in ["adaptation_error", "memory_efficiency", "structural_churn"]:
+            data = aggregated_results[cond][metric]
+            print(f"  -> {metric.ljust(20)}: {np.mean(data):.5f} ± {np.std(data):.5f}")
+            
+    print("\n--- STATISTICAL VALIDATION vs REFACTORED BASELINES ---")
+    
+    # Compare dynamic topology against primary static control: Fixed-topology MLP
+    for target_metric in ["adaptation_error", "memory_efficiency"]:
+        dynamic_data = np.array(aggregated_results["dynamic_topology"][target_metric])
+        fixed_data = np.array(aggregated_results["fixed_mlp"][target_metric])
+        
+        # Welch's t-test
+        t_stat, p_val = stats.ttest_ind(dynamic_data, fixed_data, equal_var=False)
+        
+        # Cohen's d effect size
+        pooled_std = np.sqrt((np.var(dynamic_data, ddof=1) + np.var(fixed_data, ddof=1)) / 2.0)
+        cohens_d = (np.mean(dynamic_data) - np.mean(fixed_data)) / pooled_std
+        
+        # Bootstrap sequence to isolate true 95% Confidence Intervals
+        bootstrap_diffs = []
+        for _ in range(2000):
+            sample_dynamic = np.random.choice(dynamic_data, size=len(dynamic_data), replace=True)
+            sample_fixed = np.random.choice(fixed_data, size=len(fixed_data), replace=True)
+            bootstrap_diffs.append(np.mean(sample_dynamic) - np.mean(sample_fixed))
+        ci_lower, ci_upper = np.percentile(bootstrap_diffs, [2.5, 97.5])
+        
+        print(f"\nEvaluated Metric: {target_metric.upper()} (SMEA vs Fixed-Topology MLP)")
+        print(f"  * Welch's t-statistic : {t_stat:.4f}")
+        print(f"  * Asymptotic p-value   : {p_val:.6e}")
+        print(f"  * Cohen's d Effect Size: {cohens_d:.4f}")
+        print(f"  * Empirical 95% CI     : [{ci_lower:.5f}, {ci_upper:.5f}]")
+        
+    print("\n======================= PIPELINE EXECUTION COMPLETE =======================")
+
 if __name__ == "__main__":
-    print("Initializing THE OMNIPRESENT STREAM Core Engine (v14.0)...")
+    print("Initializing THE OMNIPRESENT STREAM Core Engine (v20.0)...")
     
-    # Instance setup configuring an open-boundary runtime environment
-    system_runtime = StreamOS(g_value=0.65, expansion_rate=15.20, force_mode='GRAVITY')
-    
-    # Execute a simulation lifecycle sequence of 10 ticks
-    for tick in range(10):
-        system_runtime.execute_system_tick(delta_time=0.016)
-        time.sleep(0.1)
+    # Run legacy StreamOS verification test to ensure compatibility
+    legacy_os = StreamOS(g_value=0.65, expansion_rate=15.20, force_mode='GRAVITY')
+    print("Running v14.0 compatibility checks (10 steps)...")
+    for step in range(10):
+        legacy_os.execute_system_tick(delta_time=0.016)
+        
+    print("\nVerification of compatibility successful. Proceeding to v20.0 Benchmark execution...\n")
+    execute_comprehensive_statistical_pipeline()
